@@ -1,0 +1,1 @@
+export const PLACEHOLDER_IMAGE = require('../assets/images/i1.png');

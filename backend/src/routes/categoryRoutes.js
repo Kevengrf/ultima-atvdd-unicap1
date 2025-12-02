@@ -11,9 +11,6 @@ import categoryRecipeRoutes from './categoryRecipeRoutes.js';
 
 const router = express.Router();
 
-// Todas as rotas de categorias são protegidas
-router.use(authMiddleware);
-
 router.use('/:categoryId/recipes', categoryRecipeRoutes);
 
 router.post('/', createCategory);

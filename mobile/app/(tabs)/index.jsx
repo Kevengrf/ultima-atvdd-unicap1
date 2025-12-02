@@ -39,35 +39,12 @@ const HomeScreen = () => {
       // For now, let's assume the first recipe is the featured one.
       // In a real app, you might have a dedicated featured recipe endpoint or logic.
       if (allRecipes.length > 0) {
-        const firstRecipe = allRecipes[0];
-        setFeaturedRecipe({
-          id: firstRecipe.id,
-          title: firstRecipe.name,
-          description: firstRecipe.description,
-          image: firstRecipe.image || require("../../assets/images/i1.png"), // Placeholder image
-          cookTime: "30 minutes", // Placeholder
-          servings: 4, // Placeholder
-          category: backendCategories.find(cat => cat.id === firstRecipe.category_id)?.name || "Unknown",
-          area: "Global", // Placeholder
-          ingredients: firstRecipe.ingredients,
-          instructions: firstRecipe.instructions,
-        });
+        setFeaturedRecipe(allRecipes[0]);
       } else {
         setFeaturedRecipe(null);
       }
       
-      setRecipes(allRecipes.map(recipe => ({
-        id: recipe.id,
-        title: recipe.name,
-        description: recipe.description,
-        image: recipe.image || require("../../assets/images/i1.png"), // Placeholder image
-        cookTime: "30 minutes", // Placeholder
-        servings: 4, // Placeholder
-        category: backendCategories.find(cat => cat.id === recipe.category_id)?.name || "Unknown",
-        area: "Global", // Placeholder
-        ingredients: recipe.ingredients,
-        instructions: recipe.instructions,
-      })));
+      setRecipes(allRecipes);
 
     } catch (error) {
       console.error("Error loading the data", error);
@@ -81,18 +58,7 @@ const HomeScreen = () => {
     try {
       setLoading(true);
       const categoryRecipes = await mealAPI.getRecipesByCategoryId(categoryId);
-      setRecipes(categoryRecipes.map(recipe => ({
-        id: recipe.id,
-        title: recipe.name,
-        description: recipe.description,
-        image: recipe.image || require("../../assets/images/i1.png"), // Placeholder image
-        cookTime: "30 minutes", // Placeholder
-        servings: 4, // Placeholder
-        category: categories.find(cat => cat.id === recipe.category_id)?.name || "Unknown",
-        area: "Global", // Placeholder
-        ingredients: recipe.ingredients,
-        instructions: recipe.instructions,
-      })));
+      setRecipes(categoryRecipes);
     } catch (error) {
       console.error("Error loading category data:", error);
       Alert.alert("Error", error.message || "Failed to load category recipes.");

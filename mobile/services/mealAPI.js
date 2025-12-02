@@ -1,74 +1,67 @@
 import { recipes } from '../mock/recipes';
 import { categories } from '../mock/categories';
-import { favorites } from '../mock/favorites';
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
+const transformRecipeData = (recipe) => {
+  if (!recipe) return null;
+  // The frontend components expect a 'title' field and an 'image' object with a URI
+  return {
+    ...recipe,
+    title: recipe.name,
+    image: { uri: recipe.image },
+  };
+};
+
 export const mealAPI = {
   async getAllRecipes() {
-    await delay(500);
-    return recipes;
+    await delay(50);
+    return recipes.map(transformRecipeData);
   },
 
   async getRecipeById(id) {
-    await delay(500);
-    const recipe = recipes.find(r => r.id === parseInt(id));
-    return recipe;
+    await delay(50);
+    const recipe = recipes.find(r => r.id.toString() === id.toString());
+    return transformRecipeData(recipe);
   },
 
   async getAllCategories() {
-    await delay(500);
+    await delay(50);
     return categories;
   },
 
   async getRecipesByCategoryId(categoryId) {
-    await delay(500);
-    return recipes.filter(r => r.category_id === categoryId);
+    await delay(50);
+    const filtered = recipes.filter(r => r.category_id.toString() === categoryId.toString());
+    return filtered.map(transformRecipeData);
   },
 
-  async getUserFavorites(userId) {
-    await delay(500);
-    return recipes.filter(r => favorites.includes(r.id));
-  },
-
-  async addFavorite(userId, recipeId) {
-    await delay(500);
-    if (!favorites.includes(recipeId)) {
-      favorites.push(recipeId);
-    }
-    return { success: true };
-  },
-
-  async removeFavorite(userId, recipeId) {
-    await delay(500);
-    const index = favorites.indexOf(recipeId);
-    if (index > -1) {
-      favorites.splice(index, 1);
-    }
-    return { success: true };
-  },
-
+  // Restore search functions for search.jsx
   async searchMealsByName(query) {
-    await delay(500);
+    await delay(50);
     if (!query) return [];
-    return recipes.filter(r => r.name.toLowerCase().includes(query.toLowerCase()));
+    return recipes
+      .filter(r => r.name.toLowerCase().includes(query.toLowerCase()))
+      .map(transformRecipeData);
   },
 
   async filterByIngredient(query) {
-    await delay(500);
+    await delay(50);
     if (!query) return [];
-    return recipes.filter(r => r.ingredients.some(i => i.toLowerCase().includes(query.toLowerCase())));
+    // The mock data's ingredients is an array of strings
+    return recipes
+      .filter(r => r.ingredients.some(i => i.toLowerCase().includes(query.toLowerCase())))
+      .map(transformRecipeData);
   },
 
   async getRandomMeals(count) {
-    await delay(500);
-    const shuffled = recipes.sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, count);
+    await delay(50);
+    const shuffled = [...recipes].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count).map(transformRecipeData);
   },
 
+  // Kept for backwards compatibility with original search screen code
   transformMealData(meal) {
-    // This function is now mostly a pass-through since our mock data is already in the desired format.
-    // However, we'll keep it for consistency in case of any minor transformations needed.
-    return meal;
+    return transformRecipeData(meal);
   }
 };

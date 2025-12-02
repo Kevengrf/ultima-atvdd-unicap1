@@ -10,9 +10,6 @@ import authMiddleware from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
-// Protege todas as rotas de receitas
-router.use(authMiddleware);
-
 router.post('/', createRecipe);
 router.get('/', getAllRecipes);
 router.get('/:id', getRecipeById);

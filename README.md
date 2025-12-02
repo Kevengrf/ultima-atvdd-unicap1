@@ -1,4 +1,4 @@
-# Projeto de Aplicativo de Receitas - UNIALFA
+# Projeto de Aplicativo de Receitas - UNICAP
 
 Este repositório contém o código-fonte de um aplicativo de receitas, desenvolvido como parte de um projeto de grupo. O projeto é dividido em duas partes principais: o backend e o frontend (mobile), ambos contidos neste mesmo repositório.
 

@@ -1,0 +1,41 @@
+ARQUITETURA DO PROJETO E REQUISITOS
+
+Este documento descreve a arquitetura atual do projeto e as tecnologias utilizadas, focando no estado mais recente após as modificações.
+
+1.  ARQUITETURA GERAL
+    -   Monorepo: O projeto é organizado como um monorepo, contendo duas aplicações principais: 'backend' e 'mobile'.
+    -   Backend (API): Uma API RESTful desenvolvida em Node.js com Express.js.
+    -   Mobile (Frontend): Um aplicativo móvel desenvolvido com React Native usando o framework Expo.
+
+2.  REQUISITOS E FUNCIONALIDADES ATUAIS
+    -   **Funcionalidade Principal:** O aplicativo mobile exibe listas de receitas e categorias.
+    -   **Navegação:** Permite navegar entre telas de receitas, busca e uma lista geral de todas as receitas.
+    -   **Detalhes da Receita:** Exibe informações detalhadas de cada receita (ingredientes, instruções, tempo de preparo).
+    -   **Busca:** Implementa funcionalidade de busca de receitas (por nome ou ingrediente) via filtro no lado do cliente (nos dados de mock).
+    -   **Sem Autenticação:** O sistema de autenticação (login/cadastro) foi removido do front-end.
+    -   **Fonte de Dados:** Atualmente, o aplicativo mobile utiliza dados de mock (dados de teste locais).
+
+3.  TECNOLOGIAS E BIBLIOTECAS UTILIZADAS
+
+    a.  BACKEND (API)
+        -   **Linguagem/Framework:** Node.js, Express.js
+        -   **ORM/Database Client:** Drizzle ORM, `postgres` (para PostgreSQL)
+        -   **Banco de Dados:** PostgreSQL (ex: NeonDB, Supabase)
+        -   **Autenticação (Potencial):** `bcryptjs`, `jsonwebtoken` (presente no backend, mas não usado pelo frontend atual)
+        -   **Outros:** `cors`, `dotenv`, `cron` (configuração)
+        -   **Deploy:** Vercel
+
+    b.  MOBILE (FRONTEND)
+        -   **Framework:** Expo (React Native)
+        -   **Navegação:** Expo Router, React Navigation
+        -   **UI/UX:** `expo-image`, `expo-linear-gradient`, `@expo/vector-icons`, `expo-blur`
+        -   **Gerenciamento de Estado:** Reage a hooks básicos (`useState`, `useEffect`, `useCallback`).
+        -   **Fonte de Dados:** Dados de mock (`mobile/mock/recipes.js`, `mobile/mock/categories.js`).
+        -   **Outros:** `react-native-gesture-handler`, `react-native-reanimated`, `react-native-safe-area-context`, `react-native-screens`, `react-native-webview`.
+        -   **Deploy:** Expo Application Services (EAS Update) para publicação em Expo Go.
+
+4.  WORKFLOW GERAL
+    -   **Desenvolvimento:** Realizado localmente usando Node.js para o backend e Expo CLI para o mobile.
+    -   **Deploy Backend:** O backend é implantado na Vercel através da CLI do Vercel.
+    -   **Publicação Mobile:** O aplicativo mobile é publicado na plataforma Expo (via EAS Update), tornando-o acessível através do aplicativo Expo Go para testes e compartilhamento.
+    -   **Controle de Versão:** Git/GitHub para controle de versão do código.

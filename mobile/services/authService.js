@@ -1,58 +1,26 @@
 import * as SecureStore from 'expo-secure-store';
-import { API_URL } from '../constants/api';
+import { user } from '../mock/user';
 
 const TOKEN_KEY = 'jwt_token';
 const USER_ID_KEY = 'user_id';
 
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
 export const authService = {
   async login(email, password) {
-    try {
-      const response = await fetch(`${API_URL}/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Login failed');
-      }
-
-      await SecureStore.setItemAsync(TOKEN_KEY, data.token);
-      await SecureStore.setItemAsync(USER_ID_KEY, String(data.user.id));
-      return data.user;
-    } catch (error) {
-      console.error('Login error:', error);
-      throw error;
-    }
+    await delay(500);
+    // In a real mock, you might want to check credentials, but for a demo, we'll just succeed.
+    await SecureStore.setItemAsync(TOKEN_KEY, 'mock_jwt_token');
+    await SecureStore.setItemAsync(USER_ID_KEY, user.id);
+    return user;
   },
 
   async signup(name, email, password) {
-    try {
-      const response = await fetch(`${API_URL}/auth/signup`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name, email, password }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Signup failed');
-      }
-
-      await SecureStore.setItemAsync(TOKEN_KEY, data.token);
-      await SecureStore.setItemAsync(USER_ID_KEY, String(data.user.id));
-      return data.user;
-    } catch (error) {
-      console.error('Signup error:', error);
-      throw error;
-    }
+    await delay(500);
+    // Simulate a successful signup
+    await SecureStore.setItemAsync(TOKEN_KEY, 'mock_jwt_token');
+    await SecureStore.setItemAsync(USER_ID_KEY, user.id);
+    return user;
   },
 
   async getToken() {
@@ -71,3 +39,5 @@ export const authService = {
     await SecureStore.deleteItemAsync(USER_ID_KEY);
   },
 };
+
+

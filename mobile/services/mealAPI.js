@@ -1,124 +1,74 @@
-import { API_URL } from '../constants/api';
-import { authService } from './authService';
+import { recipes } from '../mock/recipes';
+import { categories } from '../mock/categories';
+import { favorites } from '../mock/favorites';
 
-const getAuthHeaders = async () => {
-  const token = await authService.getToken();
-  return {
-    'Content-Type': 'application/json',
-    ...(token && { 'Authorization': `Bearer ${token}` }),
-  };
-};
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 export const mealAPI = {
   async getAllRecipes() {
-    try {
-      const headers = await getAuthHeaders();
-      const response = await fetch(`${API_URL}/recipes`, { headers });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || 'Failed to fetch recipes');
-      }
-      return data;
-    } catch (error) {
-      console.error('Error fetching all recipes:', error);
-      throw error;
-    }
+    await delay(500);
+    return recipes;
   },
 
   async getRecipeById(id) {
-    try {
-      const headers = await getAuthHeaders();
-      const response = await fetch(`${API_URL}/recipes/${id}`, { headers });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || 'Failed to fetch recipe by ID');
-      }
-      return data;
-    } catch (error) {
-      console.error('Error fetching recipe by ID:', error);
-      throw error;
-    }
+    await delay(500);
+    const recipe = recipes.find(r => r.id === parseInt(id));
+    return recipe;
   },
 
   async getAllCategories() {
-    try {
-      const headers = await getAuthHeaders();
-      const response = await fetch(`${API_URL}/categories`, { headers });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || 'Failed to fetch categories');
-      }
-      return data;
-    } catch (error) {
-      console.error('Error fetching all categories:', error);
-      throw error;
-    }
+    await delay(500);
+    return categories;
   },
 
   async getRecipesByCategoryId(categoryId) {
-    try {
-      const headers = await getAuthHeaders();
-      const response = await fetch(`${API_URL}/categories/${categoryId}/recipes`, { headers });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || 'Failed to fetch recipes by category ID');
-      }
-      return data;
-    } catch (error) {
-      console.error('Error fetching recipes by category ID:', error);
-      throw error;
-    }
+    await delay(500);
+    return recipes.filter(r => r.category_id === categoryId);
   },
 
   async getUserFavorites(userId) {
-    try {
-      const headers = await getAuthHeaders();
-      const response = await fetch(`${API_URL}/users/${userId}/favorites`, { headers });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || 'Failed to fetch user favorites');
-      }
-      return data;
-    } catch (error) {
-      console.error('Error fetching user favorites:', error);
-      throw error;
-    }
+    await delay(500);
+    return recipes.filter(r => favorites.includes(r.id));
   },
 
   async addFavorite(userId, recipeId) {
-    try {
-      const headers = await getAuthHeaders();
-      const response = await fetch(`${API_URL}/users/${userId}/favorites`, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({ recipe_id: recipeId }),
-      });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || 'Failed to add favorite');
-      }
-      return data;
-    } catch (error) {
-      console.error('Error adding favorite:', error);
-      throw error;
+    await delay(500);
+    if (!favorites.includes(recipeId)) {
+      favorites.push(recipeId);
     }
+    return { success: true };
   },
 
   async removeFavorite(userId, recipeId) {
-    try {
-      const headers = await getAuthHeaders();
-      const response = await fetch(`${API_URL}/users/${userId}/favorites/${recipeId}`, {
-        method: 'DELETE',
-        headers,
-      });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || 'Failed to remove favorite');
-      }
-      return data;
-    } catch (error) {
-      console.error('Error removing favorite:', error);
-      throw error;
+    await delay(500);
+    const index = favorites.indexOf(recipeId);
+    if (index > -1) {
+      favorites.splice(index, 1);
     }
+    return { success: true };
   },
+
+  async searchMealsByName(query) {
+    await delay(500);
+    if (!query) return [];
+    return recipes.filter(r => r.name.toLowerCase().includes(query.toLowerCase()));
+  },
+
+  async filterByIngredient(query) {
+    await delay(500);
+    if (!query) return [];
+    return recipes.filter(r => r.ingredients.some(i => i.toLowerCase().includes(query.toLowerCase())));
+  },
+
+  async getRandomMeals(count) {
+    await delay(500);
+    const shuffled = recipes.sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count);
+  },
+
+  transformMealData(meal) {
+    // This function is now mostly a pass-through since our mock data is already in the desired format.
+    // However, we'll keep it for consistency in case of any minor transformations needed.
+    return meal;
+  }
 };

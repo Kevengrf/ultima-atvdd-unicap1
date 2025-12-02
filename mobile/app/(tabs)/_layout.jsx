@@ -1,13 +1,10 @@
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "../../constants/colors";
+import { BlurView } from "expo-blur";
+import { StyleSheet } from "react-native";
 
 const TabsLayout = () => {
-  // TODO: Implement custom authentication check here
-  // const { isSignedIn, isLoaded } = useAuth();
-  // if (!isLoaded) return null;
-  // if (!isSignedIn) return <Redirect href={"/(auth)/sign-in"} />;
-
   return (
     <Tabs
       screenOptions={{
@@ -15,13 +12,24 @@ const TabsLayout = () => {
         tabBarActiveTintColor: COLORS.primary,
         tabBarInactiveTintColor: COLORS.textLight,
         tabBarStyle: {
-          backgroundColor: COLORS.white,
-          borderTopColor: COLORS.border,
-          borderTopWidth: 1,
-          paddingBottom: 8,
-          paddingTop: 8,
+          position: "absolute",
+          borderTopWidth: 0,
+          paddingBottom: 10,
+          paddingTop: 10,
           height: 80,
         },
+        tabBarBackground: () => (
+          <BlurView
+            intensity={95}
+            tint="light"
+            style={{
+              ...StyleSheet.absoluteFillObject,
+              overflow: "hidden",
+              borderTopLeftRadius: 20,
+              borderTopRightRadius: 20,
+            }}
+          />
+        ),
         tabBarLabelStyle: {
           fontSize: 12,
           fontWeight: "600",
@@ -31,21 +39,21 @@ const TabsLayout = () => {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Recipes",
+          title: "Receitas",
           tabBarIcon: ({ color, size }) => <Ionicons name="restaurant" size={size} color={color} />,
         }}
       />
       <Tabs.Screen
         name="search"
         options={{
-          title: "Search",
+          title: "Pesquisar",
           tabBarIcon: ({ color, size }) => <Ionicons name="search" size={size} color={color} />,
         }}
       />
       <Tabs.Screen
         name="favorites"
         options={{
-          title: "Favorites",
+          title: "Favoritos",
           tabBarIcon: ({ color, size }) => <Ionicons name="heart" size={size} color={color} />,
         }}
       />
